@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 #  MBTechWorks.com 2016
 #  Pulse Width Modulation (PWM) demo to cycle brightness of an LED
 
@@ -18,16 +19,17 @@ while exit==False:
     stp=int(input("Step size (0-100): "))
     while stp > 100:
         stp=int(input("Enter value 0-100: "))
-    speed=float(input("Increment speed (s): "))
-    print (fval)
+    #print (fval,stp,speed)
 
     pwm.start(fval)       
-    i=int(fval*10)                           
-    for i in range(i, 1001, stp):        
-        fval=float(i)/10
-        pwm.ChangeDutyCycle(fval)
-        time.sleep(speed)               
-        print("% Duty: {0} Inc: {1}%/s".format(fval,stp/10/speed))
+    i=int(fval*10)
+    if stp != 0:
+        speed=float(input("Increment speed (s): "))
+        for i in range(i, 1001, stp):        
+            fval=float(i)/10
+            pwm.ChangeDutyCycle(fval)
+            time.sleep(speed)               
+            print("% Duty: {0} Inc: {1}%/s".format(fval,stp/10/speed))
     var=input("Enter to continue, q to quit...")
     if var == "q":
         exit=True
