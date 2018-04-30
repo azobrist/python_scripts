@@ -29,16 +29,19 @@ while exit==False:
         stp=int(input("Enter value 0-100: "))
     #print (fval,stp,speed)
 
-    set_pwm(fval)       
+#    set_pwm(fval)       
     i=int(fval*10)
     if stp != 0:
         speed=float(input("Increment speed (s): "))
         for i in range(i, 1001, stp):        
             fval=float(i)/10
             set_pwm(fval)
-            print("% Duty: {0} Inc: {1}%/s".format(per,stp/speed))
-            time.sleep(speed) 
+            print("% Duty: {0} Inc: {1}%/s".format(fval,stp/speed))
+            time.sleep(speed)
+            set_pwm(0)
+            input("Enter to continue...")
     else:
+        set_pwm(fval)
         print("% Duty: {0}".format(fval)) 
     var=input("Enter to continue, q to quit...")
     if var == "q":
