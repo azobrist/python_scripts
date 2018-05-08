@@ -24,7 +24,7 @@ exit=False
 while exit==False:
     # main loop of program
     fval=float(input("0.1 - 100 choose start value(%): "))
-    stp=int(input("Step size (0-100): "))
+    stp=int(input("Step size (1/1000): "))
     while stp > 100:
         stp=int(input("Enter value 0-100: "))
     #print (fval,stp,speed)
@@ -38,8 +38,10 @@ while exit==False:
             set_pwm(fval)
             print("% Duty: {0} Inc: {1}%/s".format(fval,stp/speed))
             time.sleep(speed)
-            set_pwm(0)
-            input("Enter to continue...")
+            #set_pwm(0)
+            #input("Enter to continue...")
+        time.sleep(1)
+        set_pwm(0)
     else:
         set_pwm(fval)
         print("% Duty: {0}".format(fval)) 
