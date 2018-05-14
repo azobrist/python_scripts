@@ -23,28 +23,47 @@ def set_pwm(per):
 exit=False
 while exit==False:
     # main loop of program
-    fval=float(input("0.1 - 100 choose start value(%): "))
-    stp=int(input("Step size (1/1000): "))
-    while stp > 100:
-        stp=int(input("Enter value 0-100: "))
-    #print (fval,stp,speed)
+    #ontime=0.5
+    #offtime=0.5
+    #offval=10
+    #print("On Time: {0} Off Time: {1} Off value: {2}%\n".format(ontime,offtime,offval))
+    #offval=input("Off time duty cycle(%): ")
+    i=float(input("0.1 - 100 choose start value(%): "))
+    st=int(input("Step size (1/10 of 1%, 10 - 100): "))
+    while st > 100:
+        st=int(input("Enter value 0-100: "))
+    cnr=int(input("Enter % to begin rolloff(1-100): "))
+    #kndiv=input("Enter divisor for step at rolloff: ")
+    #knmult=input("Enter factor for dwel at rolloff: ")
+    tt=0
+    kndiv=10
+    knmult=2
 
-#    set_pwm(fval)       
-    i=int(fval*10)
-    if stp != 0:
-        speed=float(input("Increment speed (s): "))
-        for i in range(i, 1001, stp):        
-            fval=float(i)/10
-            set_pwm(fval)
-            print("% Duty: {0} Inc: {1}%/s".format(fval,stp/speed))
+    x=int(i*10)
+    if st != 0:
+        speed=float(input("Enter dwell time / step (s): "))
+        maxst = int(1000) - 50 #how many steps to get to 95% 
+        cnrst = cnr * 10 + 1#set knee cap
+        for x in range(x, cnrst, st):        
+            i=float(x)/10
+            set_pwm(i)
+            tt += speed
+            print("% Duty: {0} Inc: {1}% Time: {2:.6f}s".format(i,float(st)/10,tt))
             time.sleep(speed)
-            #set_pwm(0)
-            #input("Enter to continue...")
+        st = int(st/kndiv)
+        speed = speed*knmult
+        print("Begin rolloff - Step size = {0}% Dwell = {1}s".format(float(st)/10,speed))
+        for x in range(x, maxst, st):
+            i=float(x)/10
+            set_pwm(i)
+            tt += speed
+            print("% Duty: {0} Inc: {1}% Time: {2:.6f}s".format(i,float(st)/10,tt))
+            time.sleep(speed)
         time.sleep(1)
         set_pwm(0)
     else:
-        set_pwm(fval)
-        print("% Duty: {0}".format(fval)) 
+        set_pwm(i)
+        print("% Duty: {0}".format(i)) 
     var=input("Enter to continue, q to quit...")
     if var == "q":
         exit=True
